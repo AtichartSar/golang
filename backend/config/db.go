@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 
-	// "github.com/jinzhu/gorm"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -44,8 +43,6 @@ func DbURL(dbConfig *DBConfig) string {
 
 func InitDB() {
 	var err error
-	// DB, err = gorm.Open("mysql", DbURL(BuildDBConfig()))
-	//  dsn := "user:pass@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&parseTime=True&loc=Local"
 	DB, err = gorm.Open(mysql.Open(DbURL(BuildDBConfig())), &gorm.Config{})
 
 	if err != nil {

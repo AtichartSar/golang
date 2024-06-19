@@ -9,13 +9,13 @@ import (
 	"gorm.io/gorm"
 )
 
-type pagination struct{
-	ctx *gin.Context
-	query *gorm.DB
+type pagination struct {
+	ctx     *gin.Context
+	query   *gorm.DB
 	records interface{}
 }
 
-func (p *pagination)paginate() *models.PagingResult {
+func (p *pagination) paginate() *models.PagingResult {
 
 	page, _ := strconv.Atoi(p.ctx.DefaultQuery("page", "1"))
 	limit, _ := strconv.Atoi(p.ctx.DefaultQuery("limit", "10"))
@@ -25,7 +25,7 @@ func (p *pagination)paginate() *models.PagingResult {
 	go p.countRecords(ch)
 
 	offset := (page - 1) * limit
-	p.query.Order("id " + order).Limit(limit).Offset(offset).Find(p.records)
+	p.query.Order("id " + order).Limit(limit).Offset(offset).Preload("Loan").Find(p.records)
 
 	count := <-ch
 	totalPage := int(math.Ceil(float64(count) / float64(limit)))
@@ -39,10 +39,9 @@ func (p *pagination)paginate() *models.PagingResult {
 
 }
 
-func (p *pagination)countRecords(ch chan int64) {
+func (p *pagination) countRecords(ch chan int64) {
 	var count int64
 	p.query.Model(p.records).Count(&count)
 	ch <- count
 
 }
-

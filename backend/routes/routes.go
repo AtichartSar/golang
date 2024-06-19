@@ -19,7 +19,6 @@ func Serve(r *gin.Engine) {
 		customerGroup.POST("", customerController.Create)
 		customerGroup.PATCH("/:id", customerController.Update)
 		customerGroup.DELETE("/:id", customerController.Delete)
-
 	}
 
 	loanGroup := r.Group("/api/v1/loans")
@@ -28,7 +27,6 @@ func Serve(r *gin.Engine) {
 	}
 	{
 		loanGroup.GET("/:id", loanController.FindOne)
-
 		loanGroup.GET("", loanController.FindAll)
 		loanGroup.POST("", loanController.Create)
 		loanGroup.PATCH("/:id", loanController.Update)
@@ -39,6 +37,7 @@ func Serve(r *gin.Engine) {
 		DB: db,
 	}
 	{
+		paymentGroup.GET("", paymentController.FindAll)
 		paymentGroup.GET("/:id", paymentController.FindOne)
 		paymentGroup.POST("", paymentController.Create)
 	}

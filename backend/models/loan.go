@@ -20,6 +20,7 @@ type Loan struct {
 type LoanRequest struct {
 	LoanAmount   float64 `json:"loanAmount" binding:"required"`
 	InterestRate float64 `json:"interestRate" binding:"required"`
+	CustomerID   uint    `json:"customerId" binding:"required"`
 }
 
 // LoanResponse represents a response for a loan.
@@ -38,14 +39,14 @@ type LoanResponse struct {
 		Phone    string `json:"phone"`
 		Email    string `json:"email" `
 	} `json:"customer"`
-	Payment []struct {
-		ID            uint      `json:"id"`
-		PaymentDate   time.Time `json:"paymentDate"`
-		PaymentAmount float64   `json:"paymentAmount"`
-		PaymentType   string    `json:"paymentType"`
-		PaymentStatus string    `json:"paymentStatus"`
-		Description   string    `json:"description"`
-	}
+	Payments []struct {
+		ID               uint      `json:"id"`
+		PaymentDate      time.Time `json:"paymentDate"`
+		PaymentAmount    float64   `json:"paymentAmount"`
+		Description      string    `json:"description"`
+		PrincipalBalance float64   `json:"principalBalance"`
+		InterestBalance  float64   `json:"interestBalance"`
+	} `json:"Payments"`
 }
 
 // LoanUpdate represents an update for a loan.
@@ -58,4 +59,13 @@ type LoanUpdate struct {
 type LoanPaging struct {
 	Items  []LoanResponse `json:"items"`
 	Paging *PagingResult  `json:"paging"`
+}
+
+// LoanCreated represents a created loan.
+type LoanCreated struct {
+	LoanAmount   float64   `json:"loanAmount"`
+	InterestRate float64   `json:"interestRate"`
+	CreatedAt    time.Time `json:"createdAt"`
+	UpdatedAt    time.Time `json:"updatedAt"`
+	CustomerID   uint      `json:"customerId"`
 }

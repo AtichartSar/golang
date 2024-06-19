@@ -1,0 +1,94 @@
+version: "3"
+services:
+  # mariadb:
+  #   image: "mariadb:10.4.7"
+  #   container_name: yanmar-mysql
+  #   ports:
+  #     - "3306:3306"
+  #   environment:
+  #     TZ: "${TZ}"
+  #     MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+  #     MYSQL_DATABASE: ${MYSQL_DB_NAME}
+  #     MYSQL_USER: ${MYSQL_USER}
+  #     MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+  #   command:
+  # 'mysqld --innodb-flush-method=O_DSYNC --innodb-use-native-aio=OFF --log_bin=ON'
+  #   volumes:
+  #     - ${DB_PATH}:/var/lib/mysql
+  mssql:
+    image: "mcr.microsoft.com/azure-sql-edge"
+    container_name: yanmar-mssql
+    ports:
+      - "1433:1433"
+    environment:
+      TZ: "${TZ}"
+      MSSQL_SA_PASSWORD: "P@ssw0rd"
+      ACCEPT_EULA: "Y"
+    volumes:
+      - ${MSSQL_PATH}:/var/opt/mssql/data
+  redis:
+    image: "redis:6.0.9-alpine"
+    container_name: yanmar-redis
+    ports:
+      - "6379:6379"
+    environment:
+      TZ: "${TZ}"
+  minio:
+    image: "minio/minio"
+    container_name: yanmar-minio
+    ports:
+      - "9000:9000"
+      - "43563:43563"
+    environment:
+      TZ: "${TZ}"
+    command: "minio server /home/shared/line-bc --console-address ':43563'"
+    volumes:
+      - ${MINIO_PATH}:/home/shared
+  api:
+    image: "node:14.18.1-alpine"
+    container_name: yanmar-api
+    depends_on:
+      - mssql
+    ports:
+      - "3000:3000"
+    environment:
+      TYPEORM_HOST: mssql
+      REDIS_HOST: redis
+      S3_HOST: http://minio:9000
+      LINE_REDIRECT_URI: ${FE_URL}/api/auth/line/login/callback
+    working_dir: "/app"
+    volumes:
+      - ${API_PATH}:/app
+      - /app/node_modules
+    command: sh -c "yarn && yarn dev"
+  web:
+    image: "node:16.13.1-alpine"
+    container_name: yanmar-web
+    depends_on:
+      - api
+    ports:
+      - "8080:8080"
+    environment:
+      API_URL: http://api:3000
+      CHOKIDAR_USEPOLLING: "true"
+    working_dir: "/app"
+    volumes:
+      - ${WEB_PATH}:/app
+      - /app/node_modules
+      - /app/.next
+    command: sh -c "yarn && yarn dev"
+  worker:
+    image: "node:16.13.1-alpine"
+    container_name: yanmar-worker
+    depends_on:
+      - mssql
+    environment:
+      TYPEORM_HOST: mssql
+      REDIS_HOST: redis
+      S3_HOST: http://minio:9000
+      FE_URL: ${FE_URL}
+    working_dir: "/app"
+    volumes:
+      - ${WORKER_PATH}:/app
+      - /app/node_modules
+    command: sh -c "yarn && yarn dev"

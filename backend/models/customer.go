@@ -33,6 +33,14 @@ type CustomerResponse struct {
 		InterestRate float64   `json:"interestRate"`
 		CreatedAt    time.Time `json:"createdAt"`
 		UpdatedAt    time.Time `json:"updatedAt"`
+		Payments     []struct {
+			ID            uint      `json:"id"`
+			PaymentDate   time.Time `json:"paymentDate"`
+			PaymentAmount float64   `json:"paymentAmount"`
+			PaymentType   string    `json:"paymentType"`
+			PaymentStatus string    `json:"paymentStatus"`
+			Description   string    `json:"description"`
+		}
 	} `json:"loans"`
 }
 
@@ -54,6 +62,16 @@ type CustomerPaging struct {
 
 // CustomerUpdate represents the update structure for a customer.
 type CustomerUpdate struct {
+	Name     string `json:"name"`
+	Address  string `json:"address"`
+	District string `json:"district"`
+	Postcode string `json:"postcode"`
+	Phone    string `json:"phone"`
+	Email    string `json:"email"`
+}
+
+type CustomerCreated struct {
+	ID       uint   `json:"id"`
 	Name     string `json:"name"`
 	Address  string `json:"address"`
 	District string `json:"district"`

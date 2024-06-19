@@ -52,14 +52,16 @@ func (a *Customers) Create(ctx *gin.Context) {
 		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
 		return
 	}
-	ctx.JSON(http.StatusCreated, gin.H{"data": customer})
+	var serializedCustomer models.CustomerCreated
+	copier.Copy(&serializedCustomer, &customer)
+	ctx.JSON(http.StatusCreated, gin.H{"data": serializedCustomer})
 
 }
 
 func (a *Customers) findCustomerByID(ctx *gin.Context) (*models.Customer, error) {
 	var customer models.Customer
 	id := ctx.Param("id")
-	if err := a.DB.Preload("Loans").First(&customer, id).Error; err != nil {
+	if err := a.DB.Preload("Loans").Preload("Loans.Payments").First(&customer, id).Error; err != nil {
 		return nil, err
 	}
 	return &customer, nil

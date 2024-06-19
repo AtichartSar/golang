@@ -36,7 +36,7 @@ func (l *Loans) findLoanByID(ctx *gin.Context) (*models.Loan, error) {
 	var loan models.Loan
 	id := ctx.Param("id")
 
-	if err := l.DB.Preload("Customer").First(&loan, id).Error; err != nil {
+	if err := l.DB.Preload("Customer").Preload("Payments").First(&loan, id).Error; err != nil {
 		return nil, err
 	}
 
@@ -65,10 +65,10 @@ func (l *Loans) Create(ctx *gin.Context) {
 	var loan models.Loan
 	copier.Copy(&loan, &loanForm)
 	if err := l.DB.Create(&loan).Error; err != nil {
-		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": "Cant find Customer ID"})
 		return
 	}
-	var serializedLoan models.LoanResponse
+	var serializedLoan models.LoanCreated
 	copier.Copy(&serializedLoan, &loan)
 	ctx.JSON(http.StatusCreated, gin.H{"data": serializedLoan})
 }
@@ -96,7 +96,8 @@ func (l *Loans) Update(ctx *gin.Context) {
 
 }
 
-func (l Loans) Delete(ctx *gin.Context) {
+// Delete deletes a loan.
+func (l *Loans) Delete(ctx *gin.Context) {
 	loan, err := l.findLoanByID(ctx)
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
