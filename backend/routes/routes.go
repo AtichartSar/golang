@@ -9,6 +9,13 @@ import (
 
 func Serve(r *gin.Engine) {
 	db := config.DB
+
+	r.GET("", func(ctx *gin.Context) {
+		ctx.JSON(200, gin.H{
+			"message": "Welcome to Loan Service",
+		})
+	})
+
 	customerGroup := r.Group("/api/v1/customers")
 	customerController := controllers.Customers{
 		DB: db,
