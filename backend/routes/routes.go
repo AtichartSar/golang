@@ -3,6 +3,7 @@ package routes
 import (
 	"loan-service/config"
 	"loan-service/controllers"
+	"loan-service/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -16,6 +17,8 @@ func Serve(r *gin.Engine) {
 		})
 	})
 
+	authMiddleware := middleware.JWT()
+
 	customerGroup := r.Group("/api/v1/customers")
 	customerController := controllers.Customers{
 		DB: db,
@@ -24,11 +27,13 @@ func Serve(r *gin.Engine) {
 		customerGroup.GET("", customerController.FindAll)
 		customerGroup.GET("/:id", customerController.FindOne)
 		customerGroup.POST("", customerController.Create)
+		customerGroup.POST("login", customerController.Login)
 		customerGroup.PATCH("/:id", customerController.Update)
 		customerGroup.DELETE("/:id", customerController.Delete)
 	}
 
 	loanGroup := r.Group("/api/v1/loans")
+	loanGroup.Use(authMiddleware)
 	loanController := controllers.Loans{
 		DB: db,
 	}
@@ -40,6 +45,7 @@ func Serve(r *gin.Engine) {
 		loanGroup.DELETE("/:id", loanController.Delete)
 	}
 	paymentGroup := r.Group("/api/v1/payments")
+	paymentGroup.Use(authMiddleware)
 	paymentController := controllers.Payment{
 		DB: db,
 	}

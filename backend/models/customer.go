@@ -1,8 +1,10 @@
 package models
 
 import (
+	"log"
 	"time"
 
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
@@ -15,7 +17,23 @@ type Customer struct {
 	Postcode string `json:"postcode" gorm:"not null"`
 	Phone    string `json:"phone" gorm:"not null"`
 	Email    string `json:"email" gorm:"not null"`
+	Password string `json:"password"`
 	Loans    []Loan
+}
+
+func (c *Customer) BeforeCreate(tx *gorm.DB) error {
+	c.Password = c.HashAndSalt([]byte(c.Password))
+	return nil
+}
+
+func (c *Customer) HashAndSalt(pass []byte) string {
+	hashed, err := bcrypt.GenerateFromPassword(pass, bcrypt.MinCost)
+	if err != nil {
+		log.Printf("Failed to generate password: %v", err)
+		return ""
+	}
+
+	return string(hashed)
 }
 
 // CustomerResponse represents the response structure for a customer.
@@ -52,6 +70,7 @@ type CustomerRequest struct {
 	Postcode string `json:"postcode" binding:"required"`
 	Phone    string `json:"phone" binding:"required"`
 	Email    string `json:"email" binding:"required"`
+	Password string `json:"password" binding:"required"`
 }
 
 // CustomerPaging represents the paging structure for customers.
@@ -78,4 +97,13 @@ type CustomerCreated struct {
 	Postcode string `json:"postcode"`
 	Phone    string `json:"phone"`
 	Email    string `json:"email"`
+}
+
+type CustomerLoginReq struct {
+	Email    string `json:"email" binding:"required"`
+	Password string `json:"password" binding:"required"`
+}
+
+type CustomerLoginRes struct {
+	AccessToken string `json:"access_token"`
 }

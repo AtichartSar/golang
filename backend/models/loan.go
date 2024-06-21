@@ -20,7 +20,7 @@ type Loan struct {
 type LoanRequest struct {
 	LoanAmount   float64 `json:"loanAmount" binding:"required"`
 	InterestRate float64 `json:"interestRate" binding:"required"`
-	CustomerID   uint    `json:"customerId" binding:"required"`
+	// CustomerID   uint    `json:"customerId" binding:"required"`
 }
 
 // LoanResponse represents a response for a loan.

@@ -11,19 +11,19 @@ services:
       MYSQL_PASSWORD: P@ssw0rd
     ports:
       - "3306:3306"
-  go-lang:
-    container_name: go-lang
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    depends_on:
-      - db
-    environment:
-      PORT: 8080
-      DB_USER: admin
-      DB_PASS: P@ssw0rd
-      DB_HOST: db
-      DB_NAME: loan-service
-    ports:
-      - 8000:8080
+  # go-lang:
+  #   container_name: go-lang
+  #   build:
+  #     context: ./backend
+  #     dockerfile: Dockerfile
+  #   depends_on:
+  #     - db
+  #   environment:
+  #     PORT: 8080
+  #     DB_USER: admin
+  #     DB_PASS: P@ssw0rd
+  #     DB_HOST: db
+  #     DB_NAME: loan-service
+  #   ports:
+  #     - 8000:8080
 

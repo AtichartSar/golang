@@ -57,13 +57,19 @@ func (l *Loans) FindOne(ctx *gin.Context) {
 
 // Create creates a new loan.
 func (l *Loans) Create(ctx *gin.Context) {
+
 	var loanForm models.LoanRequest
+	customerId, _ := ctx.Get("customerId")
+
 	if err := ctx.ShouldBind(&loanForm); err != nil {
 		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
 		return
 	}
+
 	var loan models.Loan
 	copier.Copy(&loan, &loanForm)
+	loan.CustomerID = uint(customerId.(float64))
+
 	if err := l.DB.Create(&loan).Error; err != nil {
 		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": "Cant find Customer ID"})
 		return

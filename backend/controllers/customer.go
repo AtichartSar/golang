@@ -2,10 +2,13 @@ package controllers
 
 import (
 	"loan-service/models"
+	ptoken "loan-service/utils/token"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
@@ -58,15 +61,6 @@ func (a *Customers) Create(ctx *gin.Context) {
 
 }
 
-func (a *Customers) findCustomerByID(ctx *gin.Context) (*models.Customer, error) {
-	var customer models.Customer
-	id := ctx.Param("id")
-	if err := a.DB.Preload("Loans").Preload("Loans.Payments").First(&customer, id).Error; err != nil {
-		return nil, err
-	}
-	return &customer, nil
-}
-
 func (c *Customers) Update(ctx *gin.Context) {
 	var customerForm models.CustomerUpdate
 	if err := ctx.ShouldBind(&customerForm); err != nil {
@@ -99,4 +93,52 @@ func (c *Customers) Delete(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusNoContent, nil)
+}
+
+func (c *Customers) Login(ctx *gin.Context) {
+	var customerLoginReqForm models.CustomerLoginReq
+	if err := ctx.ShouldBind(&customerLoginReqForm); err != nil {
+		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+	}
+	customer, err := c.findCustomerByEmail(&customerLoginReqForm.Email)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		return
+	}
+
+	log.Printf("Customer: %v", customer)
+	log.Printf("customerLoginReqForm: %v", customerLoginReqForm)
+	if err := bcrypt.CompareHashAndPassword([]byte(customer.Password), []byte(customerLoginReqForm.Password)); err != nil {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "invalid password"})
+		return
+	}
+
+	tokenData := map[string]interface{}{
+		"id":    customer.ID,
+		"email": customer.Email,
+	}
+
+	accessToken := ptoken.GenerateAccessToken(tokenData)
+
+	var customerLoginRes models.CustomerLoginRes
+	customerLoginRes.AccessToken = accessToken
+	ctx.JSON(http.StatusOK, gin.H{"data": customerLoginRes})
+
+}
+
+func (a *Customers) findCustomerByID(ctx *gin.Context) (*models.Customer, error) {
+	var customer models.Customer
+	id := ctx.Param("id")
+	if err := a.DB.Preload("Loans").Preload("Loans.Payments").First(&customer, id).Error; err != nil {
+		return nil, err
+	}
+	return &customer, nil
+}
+
+func (a *Customers) findCustomerByEmail(email *string) (*models.Customer, error) {
+	var customer models.Customer
+	if err := a.DB.Where("email = ?", email).First(&customer).Error; err != nil {
+		return nil, err
+	}
+	return &customer, nil
 }
