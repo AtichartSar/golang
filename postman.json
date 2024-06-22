@@ -1,0 +1,190 @@
+{
+	"info": {
+		"_postman_id": "221797f7-563e-4d9e-a058-80cd59e88f71",
+		"name": "loan",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "10252086"
+	},
+	"item": [
+		{
+			"name": "customers",
+			"item": [
+				{
+					"name": "customers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{api_url}}/customers"
+					},
+					"response": []
+				},
+				{
+					"name": "customers/:id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{api_url}}/customers/2"
+					},
+					"response": []
+				},
+				{
+					"name": "customers",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"atichart\",\r\n    \"address\":\"123 Main St\",\r\n    \"district\":\"Downtown\",\r\n\"postcode\":\"zzzzz\",\r\n    \"phone\":\"0614287162\",\r\n    \"email\":\"jill@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{api_url}}/customers"
+					},
+					"response": []
+				},
+				{
+					"name": "customer",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"sleephim\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{api_url}}/customers/2"
+					},
+					"response": []
+				},
+				{
+					"name": "customers",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{api_url}}/customers/1"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "loans",
+			"item": [
+				{
+					"name": "loans",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{api_url}}/loans"
+					},
+					"response": []
+				},
+				{
+					"name": "loans/:id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{api_url}}/loans/2"
+					},
+					"response": []
+				},
+				{
+					"name": "loans",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"loanAmount\":1000,\r\n    \"interestRate\":25,\r\n    \"customerId\":2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{api_url}}/loans"
+					},
+					"response": []
+				},
+				{
+					"name": "loans",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": "{{api_url}}/loans"
+					},
+					"response": []
+				},
+				{
+					"name": "loans",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{api_url}}/loans/1"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "payments",
+			"item": [
+				{
+					"name": "payment",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"loanID\":2,\r\n    \"description\":\"xxxx\",\r\n    \"paymentStatus\":\"true\",\r\n    \"paymentType\":\"car\",\r\n    \"paymentAmount\":10000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{api_url}}/payments"
+					},
+					"response": []
+				},
+				{
+					"name": "payments/:id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{api_url}}/payments/1"
+					},
+					"response": []
+				},
+				{
+					"name": "payments",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"loanID\":2,\r\n    \"description\":\"xxxx\",\r\n    \"paymentStatus\":\"true\",\r\n    \"paymentType\":\"car\",\r\n    \"paymentAmount\":10000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{api_url}}/payments"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
