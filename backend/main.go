@@ -22,7 +22,6 @@ func main() {
 
 	// migrations.Migrate()
 	r := gin.Default()
-
 	routes.Serve(r)
 
 	r.Run(":" + os.Getenv("PORT"))
