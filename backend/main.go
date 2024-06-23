@@ -2,6 +2,7 @@ package main
 
 import (
 	"loan-service/config"
+	"loan-service/migrations"
 	"loan-service/routes"
 	"log"
 	"os"
@@ -20,7 +21,7 @@ func main() {
 	config.InitDB()
 	defer config.CloseDB()
 
-	// migrations.Migrate()
+	migrations.Migrate()
 	r := gin.Default()
 	routes.Serve(r)
 

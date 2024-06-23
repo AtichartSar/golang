@@ -16,7 +16,6 @@ func Serve(r *gin.Engine) {
 			"message": "Welcome to Loan Service",
 		})
 	})
-
 	authMiddleware := middleware.JWT()
 
 	customerGroup := r.Group("/api/v1/customers")

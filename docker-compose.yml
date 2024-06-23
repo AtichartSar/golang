@@ -11,19 +11,42 @@ services:
       MYSQL_PASSWORD: P@ssw0rd
     ports:
       - "3306:3306"
-  # go-lang:
-  #   container_name: go-lang
-  #   build:
-  #     context: ./backend
-  #     dockerfile: Dockerfile
-  #   depends_on:
-  #     - db
-  #   environment:
-  #     PORT: 8080
-  #     DB_USER: admin
-  #     DB_PASS: P@ssw0rd
-  #     DB_HOST: db
-  #     DB_NAME: loan-service
-  #   ports:
-  #     - 8000:8080
-
+    # networks:
+    #   - my-network
+  go-lang:
+    container_name: go-lang
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    restart: always
+    environment:
+      PORT: 8080
+      DB_USER: admin
+      DB_PASS: P@ssw0rd
+      DB_HOST: db
+      DB_NAME: loan-service
+    ports:
+      - 8080:8080
+    # networks:
+    #   - my-network
+  frontend:
+    container_name: next-js
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    depends_on:
+      - go-lang
+    ports:
+      - 3000:3000
+    environment:
+      API_PROXY_DESTINATION: http://go-lang:8080/api/:path*
+    # networks:
+    #   - my-network
+# networks:
+#   my-network:
+#     driver: bridge
+networks:
+  default:
+    name: example
