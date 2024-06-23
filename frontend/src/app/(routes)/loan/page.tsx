@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
-import TableLoan from "./components/Table/table";
 import { Button, Col, Row } from "antd";
-import CreateLoanButton from "./components/ฺีิิButton/CreateLoan";
+import CreateLoanButton from "./components/Button/CreateLoan";
+import TableLoan from "./components/Table/Table";
 
 type Props = {};
 

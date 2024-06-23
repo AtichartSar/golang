@@ -4,7 +4,8 @@ import { setAccessToken } from "@/service/token";
 import styled from "@emotion/styled";
 import { Button, Form, Input, Row, Space, message } from "antd";
 import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React from "react";
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
 type Props = {};
 
@@ -28,20 +29,26 @@ const FormLogin = (props: Props) => {
   };
 
   return (
-    <Form form={form} onFinish={handleSubmit} labelCol={{ span: "8" }}>
+    <Form form={form} onFinish={handleSubmit} labelCol={{ span: "4" }}>
       <Form.Item
         name="email"
-        label="อีเมล"
         rules={[{ required: true, message: "กรุณากรอกอีเมล", type: "email" }]}
       >
-        <Input placeholder="อีเมล" />
+        <Input
+          prefix={<UserOutlined className="site-form-item-icon" />}
+          placeholder="อีเมล"
+        />
+        {/* <Input placeholder="อีเมล" /> */}
       </Form.Item>
       <Form.Item
         name="password"
-        label="รหัสผ่าน"
         rules={[{ required: true, message: "กรุณากรอกหัสผ่าน" }]}
       >
-        <Input.Password placeholder="รหัสผ่าน" />
+        <Input
+          prefix={<LockOutlined className="site-form-item-icon" />}
+          type="password"
+          placeholder="รหัสผ่าน"
+        />
       </Form.Item>
       <Row justify="end">
         <a onClick={handleRegister}>สมัครสมาชิก</a>

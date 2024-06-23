@@ -4,13 +4,12 @@ import { loanCreateReq, loanUpdateReq } from "@/service/models/loan/loanReq";
 import styled from "@emotion/styled";
 import {
   Button,
-  Col,
   Flex,
   Form,
+  FormItemProps,
   InputNumber,
   Row,
   Space,
-  Spin,
   message,
 } from "antd";
 import { useRouter } from "next/navigation";
@@ -21,9 +20,10 @@ type Props = {
   data?: any;
   id?: string;
   loadForm?: boolean;
+  mode: "edit" | "create" | "view";
 };
 
-const FormLoan = ({ id, data, loadForm = false }: Props) => {
+const FormLoan = ({ id, data, loadForm = false, mode }: Props) => {
   const [form] = Form.useForm();
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
@@ -62,54 +62,62 @@ const FormLoan = ({ id, data, loadForm = false }: Props) => {
     }
   };
 
+  const disable = mode == "view" || loadForm;
+
+  const validateForm: FormItemProps = {
+    hasFeedback: loadForm ? true : false,
+    validateStatus: "validating",
+  };
+
   return (
-    <StyledForm form={form} onFinish={data ? handleEdit : handleSubmit}>
-      <StyledFlex vertical={true} justify="space-between">
-        <Spin spinning={loadForm}>
-          <Row style={{ width: "100%" }}>
-            <Col span={24}>
-              <Form.Item
-                name="loanAmount"
-                label="loanAmount"
-                rules={[{ required: true }]}
-              >
-                <InputNumber style={{ width: "50%" }} controls={false} />
-              </Form.Item>
-            </Col>
-            <Col span={24}>
-              <Form.Item
-                name="interestRate"
-                label="interestRate"
-                rules={[{ required: true }]}
-              >
-                <InputNumber style={{ width: "50%" }} controls={false} />
-              </Form.Item>
-            </Col>
-          </Row>
-        </Spin>
-        <Row justify="end">
-          <Form.Item>
-            <Space>
-              <Button
-                className="w-100"
-                onClick={handleCancel}
-                disabled={loading}
-              >
-                ยกเลิก
-              </Button>
-              <Button
-                className="w-100"
-                htmlType="submit"
-                type="primary"
-                loading={loading}
-                icon={<SaveOutlined />}
-              >
-                {data ? "แก้ไข" : "สร้าง"}
-              </Button>
-            </Space>
-          </Form.Item>
-        </Row>
-      </StyledFlex>
+    <StyledForm
+      form={form}
+      onFinish={data ? handleEdit : handleSubmit}
+      labelCol={{ span: 2 }}
+      style={{ position: "relative" }}
+    >
+      <Form.Item
+        {...validateForm}
+        name="loanAmount"
+        label="ยอดเงินกู้"
+        rules={[{ required: true }]}
+      >
+        <InputNumber
+          disabled={disable}
+          style={{ width: "100%" }}
+          controls={false}
+        />
+      </Form.Item>
+      <Form.Item
+        {...validateForm}
+        name="interestRate"
+        label="ดอกเบี้ย"
+        rules={[{ required: true }]}
+      >
+        <InputNumber
+          disabled={disable}
+          style={{ width: "100%" }}
+          controls={false}
+        />
+      </Form.Item>
+      <Row style={{ position: "absolute", right: "0", bottom: "0" }}>
+        <Form.Item>
+          <Space>
+            <Button className="w-100" onClick={handleCancel} disabled={loading}>
+              ยกเลิก
+            </Button>
+            <Button
+              className="w-100"
+              htmlType="submit"
+              type="primary"
+              loading={loading}
+              icon={<SaveOutlined />}
+            >
+              {data ? "แก้ไข" : "สร้าง"}
+            </Button>
+          </Space>
+        </Form.Item>
+      </Row>
     </StyledForm>
   );
 };
@@ -117,9 +125,5 @@ const FormLoan = ({ id, data, loadForm = false }: Props) => {
 export default FormLoan;
 
 const StyledForm = styled(Form)`
-  height: 100%;
-`;
-
-const StyledFlex = styled(Flex)`
   height: 100%;
 `;

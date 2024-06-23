@@ -1,13 +1,13 @@
 import {
-  UploadOutlined,
   UserOutlined,
-  VideoCameraOutlined,
+  BankOutlined,
+  CreditCardOutlined,
 } from "@ant-design/icons";
 import { theme } from "antd";
 import Sider from "antd/es/layout/Sider";
 import Menu from "antd/es/menu";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 type Props = {
   collapsed: boolean;
@@ -32,6 +32,8 @@ const SiderLayout = (props: Props) => {
         break;
     }
   };
+
+  const path = usePathname();
   return (
     <Sider trigger={null} collapsible collapsed={props.collapsed}>
       <div className="demo-logo-vertical" />
@@ -39,22 +41,22 @@ const SiderLayout = (props: Props) => {
         onClick={handleMenuClick}
         theme="dark"
         mode="inline"
-        defaultSelectedKeys={["1"]}
+        defaultSelectedKeys={[path]}
         items={[
           {
-            key: "profile",
+            key: "/loan",
+            icon: <BankOutlined />,
+            label: <Link href="/loan">loan</Link>,
+          },
+          {
+            key: "/customer",
             icon: <UserOutlined />,
-            label: <Link href="/profile">profile</Link>,
+            label: <Link href="/customer">customer</Link>,
           },
           {
-            key: "menu2",
-            icon: <VideoCameraOutlined />,
-            label: "nav 2",
-          },
-          {
-            key: "menu3",
-            icon: <UploadOutlined />,
-            label: "nav 3",
+            key: "/payment",
+            icon: <CreditCardOutlined />,
+            label: <Link href="/payment">payment</Link>,
           },
         ]}
       />

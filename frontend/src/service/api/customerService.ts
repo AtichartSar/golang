@@ -2,13 +2,14 @@ import { axiosAuth } from "@/lib/axios/axiosAuht";
 import {
   customerCreateReq,
   customerLogin,
-  customerUpdateReq,
 } from "../models/customer/customerReq";
+import { axiosGo } from "@/lib/axios/axios-go";
+import { ICustomerItemUpdateReq } from "../models/customer/customerUpdateReq";
 
 export const createCustomer = async (body: customerCreateReq) => {
   try {
     const res = await axiosAuth.post("/api/v1/customers", body);
-    return res;
+    return res.data;
   } catch (error) {
     throw error;
   }
@@ -16,35 +17,38 @@ export const createCustomer = async (body: customerCreateReq) => {
 
 export const getCustomer = async (id: String) => {
   try {
-    const res = await axiosAuth.get(`/api/v1/customers/${id}`);
-    return res;
+    const res = await axiosGo.get(`/api/v1/customers/${id}`);
+    return res.data;
   } catch (error) {
     throw error;
   }
 };
 
-export const getCustomerList = () => {
+export const getCustomerList = async (params: any) => {
   try {
-    const res = axiosAuth.get("/api/v1/customers");
-    return res;
+    const res = await axiosGo.get("/api/v1/customers", { params });
+    return res.data;
   } catch (error) {
     throw error;
   }
 };
 
-export const updateCustomer = (body: customerUpdateReq) => {
+export const updateCustomer = async (
+  id: string,
+  body: ICustomerItemUpdateReq
+) => {
   try {
-    const res = axiosAuth.put("/api/v1/customers", body);
-    return res;
+    const res = await axiosGo.patch(`/api/v1/customers/${id}`, body);
+    return res.data;
   } catch (error) {
     throw error;
   }
 };
 
-export const deleteCustomer = (id: string) => {
+export const deleteCustomer = async (id: string) => {
   try {
-    const res = axiosAuth.delete(`/api/v1/customers/${id}`);
-    return res;
+    const res = await axiosGo.delete(`/api/v1/customers/${id}`);
+    return res.data;
   } catch (error) {
     throw error;
   }

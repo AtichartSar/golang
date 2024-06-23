@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import TablePayment from "./components/Table/table";
+import TableCustomer from "./components/Table/Table";
 import { Col, Row } from "antd";
 
 type Props = {};
@@ -9,7 +9,7 @@ const Page = (props: Props) => {
     <Fragment>
       <Row justify="end" gutter={[16, 16]}>
         <Col span={24}>
-          <TablePayment />
+          <TableCustomer />
         </Col>
       </Row>
     </Fragment>

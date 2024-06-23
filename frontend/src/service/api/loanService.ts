@@ -19,9 +19,9 @@ export const getLoan = async (id: string) => {
   }
 };
 
-export const getLoanList = async () => {
+export const getLoanList = async (params: any) => {
   try {
-    const res = await axiosGo.get("/api/v1/loans");
+    const res = await axiosGo.get("/api/v1/loans", { params });
     return res.data;
   } catch (error) {
     throw error;

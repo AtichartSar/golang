@@ -1,61 +1,65 @@
 "use client";
-import { getLoanList } from "@/service/api/loanService";
-import { defaultDate } from "@/utils/date";
-import { Button, Space, Table, TableProps, message } from "antd";
-import React, { use, useEffect, useState } from "react";
-import {
-  EditOutlined,
-  DeleteOutlined,
-  SearchOutlined,
-} from "@ant-design/icons";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { IPaginationTable } from "@/interface/pagitationTable";
-import { ILoanTable, LoanListRes } from "@/service/models/loan/loanListRes";
-import { currency, percent } from "@/utils/format";
+import { Button, Space, Table, TableProps, message } from "antd";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { EditOutlined, SearchOutlined } from "@ant-design/icons";
+import { getPaymentList } from "@/service/api/paymentService";
+import { currency } from "@/utils/format";
+import { defaultDate } from "@/utils/date";
 
-type Props = {};
-
-const TableLoan = (props: Props) => {
+const TablePayment = () => {
   const searchParams = useSearchParams();
-  const [dataSource, setDataSource] = useState<ILoanTable>();
+  const [dataSource, setDataSource] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const { replace } = useRouter();
   const pathname = usePathname();
 
   const handleEdit = (id: string) => {
-    router.push(`/loan/edit/${id}`);
+    router.push(`/payment/edit/${id}`);
   };
 
   const handleView = (id: string) => {
-    router.push(`/loan/view/${id}`);
+    router.push(`/payment/view/${id}`);
   };
 
   const columns: TableProps<any>["columns"] = [
-    { title: "id", dataIndex: "id", key: "id" },
     {
-      title: "ยอดเงินกู้",
-      dataIndex: "loanAmount",
-      key: "loanAmount",
-      render: (loanAmount: string, records: any) => currency(loanAmount),
+      title: "id",
+      dataIndex: "id",
+      key: "id",
     },
     {
-      title: "ดอกเบี้ย",
-      dataIndex: "interestRate",
-      key: "interestRate",
-      render: (interestRate: string, records: any) => percent(interestRate),
+      title: "วันที่ชำระ",
+      dataIndex: "paymentDate",
+      key: "paymentDate",
+      render: (paymentDate: string, records: any) => defaultDate(paymentDate),
     },
     {
-      title: "วันที่กู้เงิน",
-      dataIndex: "createdAt",
-      key: "createdAt",
-      render: (createdAt: Date, records: any) => defaultDate(createdAt),
+      title: "ยอดชำระ",
+      dataIndex: "paymentAmount",
+      key: "paymentAmount",
+      render: (paymentAmount: string, records: any) => currency(paymentAmount),
     },
     {
-      title: "วันที่แก้ไข",
-      dataIndex: "updatedAt",
-      key: "updatedAt",
-      render: (updatedAt: Date, records: any) => defaultDate(updatedAt),
+      title: "หมายเหตุ",
+      dataIndex: "description",
+      key: "description",
+    },
+    {
+      title: "ยอดเงินต้น",
+      dataIndex: "principalBalance",
+      key: "principalBalance",
+      render: (principalBalance: string, records: any) =>
+        currency(principalBalance),
+    },
+    {
+      title: "ยอดดอกเบี้ย",
+      dataIndex: "interestBalance",
+      key: "interestBalance",
+      render: (interestBalance: string, records: any) =>
+        currency(interestBalance),
     },
     {
       title: "Action",
@@ -67,19 +71,14 @@ const TableLoan = (props: Props) => {
             icon={<EditOutlined />}
             onClick={() => handleEdit(records.id)}
           />
-          <Button icon={<DeleteOutlined />} />
           <Button
-            icon={<SearchOutlined />}
             onClick={() => handleView(records.id)}
+            icon={<SearchOutlined />}
           />
         </Space>
       ),
     },
   ];
-
-  useEffect(() => {
-    fetch();
-  }, [searchParams]);
 
   let current = searchParams.get("current")
     ? Number(searchParams.get("current"))
@@ -96,11 +95,15 @@ const TableLoan = (props: Props) => {
     replace(`${pathname}?${params.toString()}`);
   };
 
+  useEffect(() => {
+    fetch();
+  }, [searchParams]);
+
   const fetch = async () => {
     try {
       setLoading(true);
       const params = { page: current, limit: pageSize };
-      const res: LoanListRes = await getLoanList(params);
+      const res: any = await getPaymentList(params);
       setDataSource(res.data);
       setLoading(false);
     } catch (error) {
@@ -128,4 +131,4 @@ const TableLoan = (props: Props) => {
   );
 };
 
-export default TableLoan;
+export default TablePayment;

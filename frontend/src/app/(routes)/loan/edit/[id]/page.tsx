@@ -31,12 +31,12 @@ const Page = ({ params }: Props) => {
 
   useEffect(() => {
     fetch();
-  }, []);
+  }, [id]);
 
   return (
     <Fragment>
       <TitleForm label="แก้ไข" justify="start" />
-      <FormLoan data={data} id={id} loadForm={loading} />
+      <FormLoan mode="edit" data={data} id={id} loadForm={loading} />
     </Fragment>
   );
 };

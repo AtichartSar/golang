@@ -1,8 +1,7 @@
 "use client";
-import { getLoanList } from "@/service/api/loanService";
-import { defaultDate } from "@/utils/date";
+
 import { Button, Space, Table, TableProps, message } from "antd";
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   EditOutlined,
   DeleteOutlined,
@@ -10,53 +9,63 @@ import {
 } from "@ant-design/icons";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { IPaginationTable } from "@/interface/pagitationTable";
-import { ILoanTable, LoanListRes } from "@/service/models/loan/loanListRes";
-import { currency, percent } from "@/utils/format";
+import { getCustomerList } from "@/service/api/customerService";
+import {
+  ICustomerItem,
+  ICustomerListRes,
+  ICustomerTable,
+} from "@/service/models/customer/customerListRes";
 
 type Props = {};
 
-const TableLoan = (props: Props) => {
+const TableCustomer = (props: Props) => {
   const searchParams = useSearchParams();
-  const [dataSource, setDataSource] = useState<ILoanTable>();
+  const [dataSource, setDataSource] = useState<ICustomerTable>();
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const { replace } = useRouter();
   const pathname = usePathname();
 
   const handleEdit = (id: string) => {
-    router.push(`/loan/edit/${id}`);
+    router.push(`/customer/edit/${id}`);
   };
 
   const handleView = (id: string) => {
-    router.push(`/loan/view/${id}`);
+    router.push(`/customer/view/${id}`);
   };
 
-  const columns: TableProps<any>["columns"] = [
-    { title: "id", dataIndex: "id", key: "id" },
+  const columns: TableProps<ICustomerItem>["columns"] = [
     {
-      title: "ยอดเงินกู้",
-      dataIndex: "loanAmount",
-      key: "loanAmount",
-      render: (loanAmount: string, records: any) => currency(loanAmount),
+      title: "id",
+      dataIndex: "id",
+      key: "id",
     },
     {
-      title: "ดอกเบี้ย",
-      dataIndex: "interestRate",
-      key: "interestRate",
-      render: (interestRate: string, records: any) => percent(interestRate),
+      title: "ชื่อ",
+      dataIndex: "name",
+      key: "name",
     },
     {
-      title: "วันที่กู้เงิน",
-      dataIndex: "createdAt",
-      key: "createdAt",
-      render: (createdAt: Date, records: any) => defaultDate(createdAt),
+      title: "ที่อยู่",
+      dataIndex: "address",
+      key: "address",
     },
     {
-      title: "วันที่แก้ไข",
-      dataIndex: "updatedAt",
-      key: "updatedAt",
-      render: (updatedAt: Date, records: any) => defaultDate(updatedAt),
+      title: "อำเภอ",
+      dataIndex: "district",
+      key: "district",
     },
+    {
+      title: "รหัสไปรษณีย์",
+      dataIndex: "postcode",
+      key: "postcode",
+    },
+    {
+      title: "โทรศัพท์",
+      dataIndex: "phone",
+      key: "phone",
+    },
+    { title: "อีเมล", dataIndex: "email", key: "email" },
     {
       title: "Action",
       key: "action",
@@ -65,12 +74,14 @@ const TableLoan = (props: Props) => {
         <Space>
           <Button
             icon={<EditOutlined />}
-            onClick={() => handleEdit(records.id)}
+            onClick={() => handleEdit(String(records.id))}
           />
           <Button icon={<DeleteOutlined />} />
           <Button
             icon={<SearchOutlined />}
-            onClick={() => handleView(records.id)}
+            onClick={() => {
+              handleView(String(records.id));
+            }}
           />
         </Space>
       ),
@@ -100,7 +111,10 @@ const TableLoan = (props: Props) => {
     try {
       setLoading(true);
       const params = { page: current, limit: pageSize };
-      const res: LoanListRes = await getLoanList(params);
+      const res: ICustomerListRes = await getCustomerList(params);
+
+      console.log(res.data);
+
       setDataSource(res.data);
       setLoading(false);
     } catch (error) {
@@ -128,4 +142,4 @@ const TableLoan = (props: Props) => {
   );
 };
 
-export default TableLoan;
+export default TableCustomer;

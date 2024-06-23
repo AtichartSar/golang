@@ -8,14 +8,6 @@ export interface customerCreateReq {
   password: string;
 }
 
-export interface customerUpdateReq {
-  name: string;
-  address: string;
-  district: string;
-  postcode: string;
-  phone: string;
-}
-
 export interface customerLogin {
   email: string;
   password: string;
