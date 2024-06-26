@@ -52,7 +52,6 @@ type LoanResponse struct {
 // LoanUpdate represents an update for a loan.
 type LoanUpdate struct {
 	LoanAmount   float64 `json:"loanAmount"`
-	InterestRate float64 `json:"interestRate"`
 }
 
 // LoanPaging represents a paging result for loans.

@@ -26,6 +26,7 @@ func JWT() gin.HandlerFunc {
 			return
 		}
 		ctx.Set("customerId", payload["id"])
+		ctx.Set("role", payload["role"])
 		ctx.Next()
 	}
 }

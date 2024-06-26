@@ -1,10 +1,10 @@
-"use client";
-import TitleForm from "@/components/Title/Title";
-import React, { Fragment, useEffect, useState } from "react";
-import FormLoan from "../../components/Form/FormLoan";
-import { message } from "antd";
-import { getLoan } from "@/service/api/loanService";
-import { useRouter } from "next/navigation";
+'use client';
+import TitleForm from '@/components/Title/Title';
+import React, { Fragment, useEffect, useState } from 'react';
+import FormLoan from '../../components/Form/FormLoan';
+import { message } from 'antd';
+import { getLoan } from '@/service/api/loanService';
+import { useRouter } from 'next/navigation';
 
 type Props = {
   params: { id: string };
@@ -24,8 +24,8 @@ const Page = ({ params }: Props) => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      router.push("loan");
-      message.error("เกิดข้อผิดพลาด");
+      router.push('loan');
+      message.error('เกิดข้อผิดพลาด');
     }
   };
 
@@ -35,8 +35,8 @@ const Page = ({ params }: Props) => {
 
   return (
     <Fragment>
-      <TitleForm label="แก้ไข" justify="start" />
-      <FormLoan mode="view" data={data} id={id} loadForm={loading} />
+      <TitleForm label={`รายละเอียดเงินกู้ : ${id}`} justify='start' />
+      <FormLoan mode='view' data={data} id={id} loadForm={loading} />
     </Fragment>
   );
 };

@@ -2,8 +2,8 @@
 import React from "react";
 import FormRegister from "./components/form/Form";
 import { Typography } from "antd";
-import FormContainer from "../components/containner/FormContainer";
 import TitleForm from "../../../components/Title/Title";
+import FormContainer from "../components/container/FormContainer";
 
 type Props = {};
 

@@ -2,7 +2,7 @@
 import React from "react";
 import FormLogin from "./components/form/Form";
 import TitleForm from "../../../components/Title/Title";
-import FormContainer from "../components/containner/FormContainer";
+import FormContainer from "../components/container/FormContainer";
 
 type Props = {};
 

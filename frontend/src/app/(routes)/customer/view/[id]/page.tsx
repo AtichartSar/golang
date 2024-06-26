@@ -1,11 +1,11 @@
-"use client";
-import TitleForm from "@/components/Title/Title";
-import React, { Fragment, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { IPaymentIdRes } from "@/service/models/payment/paymentIdRes";
-import { message } from "antd";
-import { getCustomer } from "@/service/api/customerService";
-import FormCustomer from "../../components/Form/FormCustomer";
+'use client';
+import TitleForm from '@/components/Title/Title';
+import React, { Fragment, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { IPaymentIdRes } from '@/service/models/payment/paymentIdRes';
+import { message } from 'antd';
+import { getCustomer } from '@/service/api/customerService';
+import FormCustomer from '../../components/Form/FormCustomer';
 
 type Props = {
   params: { id: string };
@@ -25,8 +25,8 @@ const Page = ({ params }: Props) => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      router.push("loan");
-      message.error("เกิดข้อผิดพลาด");
+      router.push('loan');
+      message.error('เกิดข้อผิดพลาด');
     }
   };
 
@@ -36,8 +36,8 @@ const Page = ({ params }: Props) => {
 
   return (
     <Fragment>
-      <TitleForm label="แก้ไข" justify="start" />
-      <FormCustomer mode="view" data={data} id={id} loadForm={loading} />
+      <TitleForm label={`รายละเอียดลูกค้า : ${id}`} justify='start' />
+      <FormCustomer mode='view' data={data} id={id} loadForm={loading} />
     </Fragment>
   );
 };

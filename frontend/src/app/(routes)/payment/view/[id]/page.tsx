@@ -1,11 +1,11 @@
-"use client";
-import TitleForm from "@/components/Title/Title";
-import React, { Fragment, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { IPaymentIdRes } from "@/service/models/payment/paymentIdRes";
-import { getPayment } from "@/service/api/paymentService";
-import { message } from "antd";
-import FormPayment from "../../components/Form/FormPayment";
+'use client';
+import TitleForm from '@/components/Title/Title';
+import React, { Fragment, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { IPaymentIdRes } from '@/service/models/payment/paymentIdRes';
+import { getPayment } from '@/service/api/paymentService';
+import { message } from 'antd';
+import FormPayment from '../../components/Form/FormPayment';
 
 type Props = {
   params: { id: string };
@@ -25,8 +25,8 @@ const Page = ({ params }: Props) => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      router.push("loan");
-      message.error("เกิดข้อผิดพลาด");
+      router.push('loan');
+      message.error('เกิดข้อผิดพลาด');
     }
   };
 
@@ -36,8 +36,8 @@ const Page = ({ params }: Props) => {
 
   return (
     <Fragment>
-      <TitleForm label="แก้ไข" justify="start" />
-      <FormPayment mode="view" data={data} id={id} loadForm={loading} />
+      <TitleForm label={`รายละการชำระเงิน: ${id}`} justify='start' />
+      <FormPayment mode='view' data={data} id={id} loadForm={loading} />
     </Fragment>
   );
 };

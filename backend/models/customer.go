@@ -16,8 +16,9 @@ type Customer struct {
 	District string `json:"District"  gorm:"not null"`
 	Postcode string `json:"postcode" gorm:"not null"`
 	Phone    string `json:"phone" gorm:"not null"`
-	Email    string `json:"email" gorm:"not null"`
+	Email    string `json:"email" gorm:"not null;unique"`
 	Password string `json:"password"`
+	Role     string `json:"role" gorm:"not null;default:'customer'"`
 	Loans    []Loan
 }
 
@@ -72,6 +73,7 @@ type CustomerRequest struct {
 	Email    string `json:"email" binding:"required"`
 	Password string `json:"password" binding:"required"`
 }
+
 
 // CustomerPaging represents the paging structure for customers.
 type CustomerPaging struct {

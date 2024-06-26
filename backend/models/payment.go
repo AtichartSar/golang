@@ -31,6 +31,14 @@ type PaymentResponse struct {
 		InterestRate float64   `json:"interestRate"`
 		CreatedAt    time.Time `json:"createdAt"`
 		UpdatedAt    time.Time `json:"updatedAt"`
+		Customer     struct {
+			Name     string `json:"name"`
+			Address  string `json:"address" `
+			District string `json:"district" `
+			Postcode string `json:"postcode"`
+			Phone    string `json:"phone"`
+			Email    string `json:"email" `
+		} `json:"customer"`
 	} `json:"loan"`
 }
 
@@ -38,7 +46,7 @@ type PaymentRequest struct {
 	PaymentDate   time.Time `json:"paymentDate"`
 	PaymentAmount float64   `json:"paymentAmount" binding:"required"`
 	Description   string    `json:"description"`
-	LoanID        uint      `json:"loanId" binding:"required`
+	LoanID        uint      `json:"loanId" binding:"required"`
 }
 
 type PaymentPaging struct {

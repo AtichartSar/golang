@@ -16,18 +16,17 @@ type pagination struct {
 }
 
 func (p *pagination) paginate() *models.PagingResult {
-
+var count int64
 	page, _ := strconv.Atoi(p.ctx.DefaultQuery("page", "1"))
 	limit, _ := strconv.Atoi(p.ctx.DefaultQuery("limit", "10"))
 	order := p.ctx.DefaultQuery("order", "asc")
+p.query.Model(p.records).Count(&count)
 
-	ch := make(chan int64)
-	go p.countRecords(ch)
-
+	// go p.countRecords(ch)
+// .Preload("Loan")s
 	offset := (page - 1) * limit
-	p.query.Order("id " + order).Limit(limit).Offset(offset).Preload("Loan").Find(p.records)
+	p.query.Order("id " + order).Limit(limit).Offset(offset).Find(p.records)
 
-	count := <-ch
 	totalPage := int(math.Ceil(float64(count) / float64(limit)))
 
 	return &models.PagingResult{
@@ -36,12 +35,5 @@ func (p *pagination) paginate() *models.PagingResult {
 		TotalPage: totalPage,
 		Count:     int(count),
 	}
-
-}
-
-func (p *pagination) countRecords(ch chan int64) {
-	var count int64
-	p.query.Model(p.records).Count(&count)
-	ch <- count
 
 }

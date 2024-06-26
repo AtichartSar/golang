@@ -1,25 +1,16 @@
-"use client";
-import styled from "@emotion/styled";
-import {
-  Button,
-  Form,
-  FormItemProps,
-  Input,
-  InputNumber,
-  Row,
-  Space,
-  Spin,
-} from "antd";
-import React, { useEffect, useState } from "react";
-import { SaveOutlined } from "@ant-design/icons";
-import { useRouter } from "next/navigation";
-import { IPaymentIdData } from "@/service/models/payment/paymentIdRes";
+'use client';
+import styled from '@emotion/styled';
+import { Button, Form, FormItemProps, Input, InputNumber, Row, Space, Spin } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { SaveOutlined } from '@ant-design/icons';
+import { useRouter } from 'next/navigation';
+import { IPaymentIdData } from '@/service/models/payment/paymentIdRes';
 
 type Props = {
   data?: IPaymentIdData;
   id?: string;
   loadForm?: boolean;
-  mode: "edit" | "create" | "view";
+  mode: 'edit' | 'create' | 'view';
 };
 
 const FormPayment = ({ id, data, loadForm = false, mode }: Props) => {
@@ -30,10 +21,10 @@ const FormPayment = ({ id, data, loadForm = false, mode }: Props) => {
   const handleEdit = () => {};
   const handleSubmit = () => {};
   const handleCancel = () => {
-    router.push("/payment");
+    router.push('/payment');
   };
 
-  const disable = mode == "view" || loadForm;
+  const disable = mode == 'view' || loadForm;
 
   useEffect(() => {
     form.setFieldsValue({
@@ -45,8 +36,8 @@ const FormPayment = ({ id, data, loadForm = false, mode }: Props) => {
   }, [data]);
 
   const validateForm: FormItemProps = {
-    hasFeedback: loadForm ? true : false,
-    validateStatus: "validating",
+    hasFeedback: loadForm,
+    validateStatus: 'validating',
   };
 
   return (
@@ -54,67 +45,50 @@ const FormPayment = ({ id, data, loadForm = false, mode }: Props) => {
       form={form}
       onFinish={data ? handleEdit : handleSubmit}
       labelCol={{ span: 3 }}
-      style={{ position: "relative" }}
+      style={{ position: 'relative' }}
     >
       <Form.Item
         {...validateForm}
-        name="paymentAmount"
-        label="ยอดชำระ"
+        name='paymentAmount'
+        label='ยอดชำระ'
         rules={[{ required: true }]}
       >
-        <InputNumber
-          disabled={disable}
-          style={{ width: "100%" }}
-          controls={false}
-        />
+        <InputNumber disabled={disable} style={{ width: '100%' }} controls={false} />
+      </Form.Item>
+      <Form.Item {...validateForm} name='description' label='หมายเหตุ' rules={[{ required: true }]}>
+        <Input.TextArea disabled={disable} style={{ width: '100%' }} />
       </Form.Item>
       <Form.Item
         {...validateForm}
-        name="description"
-        label="หมายเหตุ"
+        name='principalBalance'
+        label='ยอดเงินต้น'
         rules={[{ required: true }]}
       >
-        <Input.TextArea disabled={disable} style={{ width: "100%" }} />
+        <InputNumber disabled={disable} style={{ width: '100%' }} controls={false} />
       </Form.Item>
       <Form.Item
         {...validateForm}
-        name="principalBalance"
-        label="ยอดเงินต้น"
+        name='interestBalance'
+        label='ยอดดอกเบี้ย'
         rules={[{ required: true }]}
       >
-        <InputNumber
-          disabled={disable}
-          style={{ width: "100%" }}
-          controls={false}
-        />
+        <InputNumber disabled={disable} style={{ width: '100%' }} controls={false} />
       </Form.Item>
-      <Form.Item
-        {...validateForm}
-        name="interestBalance"
-        label="ยอดดอกเบี้ย"
-        rules={[{ required: true }]}
-      >
-        <InputNumber
-          disabled={disable}
-          style={{ width: "100%" }}
-          controls={false}
-        />
-      </Form.Item>
-      <Row style={{ position: "absolute", right: "0", bottom: "0" }}>
+      <Row style={{ position: 'absolute', right: '0', bottom: '0' }}>
         <Form.Item>
           <Space>
-            <Button className="w-100" onClick={handleCancel} disabled={loading}>
-              {mode === "view" ? "กลับ" : "ยกเลิก"}
+            <Button className='w-100' onClick={handleCancel} disabled={loading}>
+              {mode === 'view' ? 'กลับ' : 'ยกเลิก'}
             </Button>
-            {mode === "edit" && (
+            {mode === 'edit' && (
               <Button
-                className="w-100"
-                htmlType="submit"
-                type="primary"
+                className='w-100'
+                htmlType='submit'
+                type='primary'
                 loading={loading}
                 icon={<SaveOutlined />}
               >
-                {data ? "แก้ไข" : "สร้าง"}
+                {data ? 'แก้ไข' : 'สร้าง'}
               </Button>
             )}
           </Space>

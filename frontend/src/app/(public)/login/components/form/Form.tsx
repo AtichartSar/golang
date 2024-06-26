@@ -6,6 +6,7 @@ import { Button, Form, Input, Row, Space, message } from "antd";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import { setCookie } from "cookies-next";
 
 type Props = {};
 
@@ -17,6 +18,7 @@ const FormLogin = (props: Props) => {
     try {
       const res = await login(value);
       setAccessToken(res.data.access_token);
+      setCookie("access_token", res.data.access_token);
       router.push("/loan");
       message.success("เข้าสู่ระบบสำเร็จ");
     } catch (error) {

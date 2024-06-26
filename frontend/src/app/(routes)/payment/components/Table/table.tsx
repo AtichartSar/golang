@@ -1,12 +1,12 @@
-"use client";
-import { IPaginationTable } from "@/interface/pagitationTable";
-import { Button, Space, Table, TableProps, message } from "antd";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import { EditOutlined, SearchOutlined } from "@ant-design/icons";
-import { getPaymentList } from "@/service/api/paymentService";
-import { currency } from "@/utils/format";
-import { defaultDate } from "@/utils/date";
+'use client';
+import { IPaginationTable } from '@/interface/paginationTable';
+import { Button, Space, Table, TableProps, message } from 'antd';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import { EditOutlined, SearchOutlined } from '@ant-design/icons';
+import { getPaymentList } from '@/service/api/paymentService';
+import { currency } from '@/utils/format';
+import { defaultDate } from '@/utils/date';
 
 const TablePayment = () => {
   const searchParams = useSearchParams();
@@ -24,74 +24,67 @@ const TablePayment = () => {
     router.push(`/payment/view/${id}`);
   };
 
-  const columns: TableProps<any>["columns"] = [
+  const columns: TableProps<any>['columns'] = [
     {
-      title: "id",
-      dataIndex: "id",
-      key: "id",
+      title: 'id',
+      dataIndex: 'id',
+      key: 'id',
     },
     {
-      title: "วันที่ชำระ",
-      dataIndex: "paymentDate",
-      key: "paymentDate",
+      title: 'วันที่ชำระ',
+      dataIndex: 'paymentDate',
+      key: 'paymentDate',
       render: (paymentDate: string, records: any) => defaultDate(paymentDate),
     },
     {
-      title: "ยอดชำระ",
-      dataIndex: "paymentAmount",
-      key: "paymentAmount",
+      title: 'ชื่อผู้กู้',
+      dataIndex: ['loan', 'customer', 'name'],
+      key: 'customer.name',
+    },
+    {
+      title: 'ยอดชำระ',
+      dataIndex: 'paymentAmount',
+      key: 'paymentAmount',
       render: (paymentAmount: string, records: any) => currency(paymentAmount),
     },
     {
-      title: "หมายเหตุ",
-      dataIndex: "description",
-      key: "description",
+      title: 'หมายเหตุ',
+      dataIndex: 'description',
+      key: 'description',
     },
     {
-      title: "ยอดเงินต้น",
-      dataIndex: "principalBalance",
-      key: "principalBalance",
-      render: (principalBalance: string, records: any) =>
-        currency(principalBalance),
+      title: 'ยอดเงินต้น',
+      dataIndex: 'principalBalance',
+      key: 'principalBalance',
+      render: (principalBalance: string, records: any) => currency(principalBalance),
     },
     {
-      title: "ยอดดอกเบี้ย",
-      dataIndex: "interestBalance",
-      key: "interestBalance",
-      render: (interestBalance: string, records: any) =>
-        currency(interestBalance),
+      title: 'ยอดดอกเบี้ย',
+      dataIndex: 'interestBalance',
+      key: 'interestBalance',
+      render: (interestBalance: string, records: any) => currency(interestBalance),
     },
     {
-      title: "Action",
-      key: "action",
-      align: "center",
+      title: 'Action',
+      key: 'action',
+      align: 'center',
       render: (_, records) => (
         <Space>
-          <Button
-            icon={<EditOutlined />}
-            onClick={() => handleEdit(records.id)}
-          />
-          <Button
-            onClick={() => handleView(records.id)}
-            icon={<SearchOutlined />}
-          />
+          <Button icon={<EditOutlined />} onClick={() => handleEdit(records.id)} />
+          <Button onClick={() => handleView(records.id)} icon={<SearchOutlined />} />
         </Space>
       ),
     },
   ];
 
-  let current = searchParams.get("current")
-    ? Number(searchParams.get("current"))
-    : 1;
-  let pageSize = searchParams.get("pageSize")
-    ? Number(searchParams.get("pageSize"))
-    : 5;
+  let current = searchParams.get('current') ? Number(searchParams.get('current')) : 1;
+  let pageSize = searchParams.get('pageSize') ? Number(searchParams.get('pageSize')) : 5;
 
   const handleChange = (pagination: IPaginationTable) => {
     const params = new URLSearchParams(searchParams);
-    params.set("current", pagination.current.toString());
-    params.set("total", pagination.total.toString());
-    params.set("pageSize", pagination.pageSize.toString());
+    params.set('current', pagination.current.toString());
+    params.set('total', pagination.total.toString());
+    params.set('pageSize', pagination.pageSize.toString());
     replace(`${pathname}?${params.toString()}`);
   };
 
@@ -108,22 +101,22 @@ const TablePayment = () => {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      message.error("Error fetching");
+      message.error('Error fetching');
     }
   };
 
   return (
     <Table
-      size="small"
+      size='small'
       loading={loading}
-      rowKey="id"
+      rowKey='id'
       dataSource={dataSource?.items}
       columns={columns}
       onChange={handleChange}
       pagination={{
         total: dataSource?.paging?.count,
         showSizeChanger: true,
-        pageSizeOptions: ["5", "10", "20"],
+        pageSizeOptions: ['5', '10', '20'],
         pageSize: pageSize,
         current: current,
       }}

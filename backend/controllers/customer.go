@@ -3,7 +3,6 @@ package controllers
 import (
 	"loan-service/models"
 	ptoken "loan-service/utils/token"
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -20,7 +19,7 @@ func (a *Customers) FindAll(ctx *gin.Context) {
 	var customers []models.Customer
 	pagination := pagination{
 		ctx:     ctx,
-		query:   a.DB,
+		query:   a.DB.Where(&models.Customer{Role: "customer"}).Preload("Loans"),
 		records: &customers,
 	}
 	paging := pagination.paginate()
@@ -106,8 +105,6 @@ func (c *Customers) Login(ctx *gin.Context) {
 		return
 	}
 
-	log.Printf("Customer: %v", customer)
-	log.Printf("customerLoginReqForm: %v", customerLoginReqForm)
 	if err := bcrypt.CompareHashAndPassword([]byte(customer.Password), []byte(customerLoginReqForm.Password)); err != nil {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "invalid password"})
 		return
@@ -116,6 +113,7 @@ func (c *Customers) Login(ctx *gin.Context) {
 	tokenData := map[string]interface{}{
 		"id":    customer.ID,
 		"email": customer.Email,
+		"role": customer.Role,
 	}
 
 	accessToken := ptoken.GenerateAccessToken(tokenData)

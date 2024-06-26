@@ -17,9 +17,19 @@ type Loans struct {
 // FindAll retrieves all loans.
 func (l *Loans) FindAll(ctx *gin.Context) {
 	var loans []models.Loan
+	var query *gorm.DB
+	role, _ := ctx.Get("role")
+
+	if(role=="admin") {
+    	query = l.DB.Preload("Customer").Preload("Payments")
+	} else {
+		customerID, _ := ctx.Get("customerId")
+    	query = l.DB.Preload("Customer").Preload("Payments").Where("customer_id = ?", customerID)
+	}
+
 	pagination := pagination{
 		ctx:     ctx,
-		query:   l.DB,
+		query:   query,
 		records: &loans,
 	}
 	paging := pagination.paginate()

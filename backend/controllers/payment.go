@@ -19,7 +19,7 @@ type Payment struct {
 func (p *Payment) findPaymentByID(ctx *gin.Context) (*models.Payment, error) {
 	var payment models.Payment
 	id := ctx.Param("id")
-	if err := p.DB.Preload("Loan").First(&payment, id).Error; err != nil {
+	if err := p.DB.Preload("Loan").Preload("Loan.Customer").First(&payment, id).Error; err != nil {
 		return nil, err
 
 	}
@@ -31,7 +31,7 @@ func (p *Payment) FindAll(ctx *gin.Context) {
 	var payment []models.Payment
 	pagination := pagination{
 		ctx:     ctx,
-		query:   p.DB,
+		query:   p.DB.Preload("Loan").Preload("Loan.Customer"),
 		records: &payment,
 	}
 	paging := pagination.paginate()
@@ -74,6 +74,21 @@ func (p *Payment) Create(ctx *gin.Context) {
 	if paymentForm.PaymentAmount > loan.LoanAmount {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Payment amount is greater than loan amount"})
 		return
+	}
+
+	if paymentForm.PaymentAmount == loan.LoanAmount{
+			payment := models.Payment{}
+			copier.Copy(&payment, &paymentForm)
+			if err := p.DB.Create(&payment).Error; err != nil {
+				ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+				return
+			}
+			if err := p.DB.Model(&loan).Update("LoanAmount","0").Error; err != nil {
+				ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+				return
+			}
+			ctx.JSON(http.StatusCreated, gin.H{"data": "loan success"})
+			return
 	}
 
 	interest := Interest{
