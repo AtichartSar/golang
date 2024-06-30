@@ -19,9 +19,9 @@ func main() {
 
 	config.InitDB()
 	defer config.CloseDB()
-	// seed.DropTable()
-	// migrations.Migrate()
-	// seed.Load()
+	seed.DropTable()
+	migrations.Migrate()
+	seed.Load()
 	r := gin.Default()
 	routes.Serve(r)
 
