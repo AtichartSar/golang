@@ -2,7 +2,9 @@ package main
 
 import (
 	"loan-service/config"
+	"loan-service/migrations"
 	"loan-service/routes"
+	"loan-service/seed"
 	"log"
 	"os"
 
