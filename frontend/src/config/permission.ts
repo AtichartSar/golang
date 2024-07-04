@@ -9,6 +9,8 @@ export enum PageRoute {
   PAYMENT = '/payment',
   CUSTOMER_LOAN = '/customer/loan',
   CUSTOMER_PAYMENT = '/customer/payment',
+  LOGIN = '/login',
+  REGISTER = '/register',
 }
 
 export const getPrivateRoute = [
@@ -18,6 +20,8 @@ export const getPrivateRoute = [
   PageRoute.CUSTOMER_LOAN,
   PageRoute.CUSTOMER_PAYMENT,
 ];
+
+export const publicRoute = [PageRoute.LOGIN, PageRoute.REGISTER];
 
 export const getPermission = {
   [Role.CUSTOMER]: {

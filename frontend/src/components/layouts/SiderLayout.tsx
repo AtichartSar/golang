@@ -38,7 +38,7 @@ const SiderLayout = (props: Props) => {
     {
       key: '/customer/loan',
       icon: <BankOutlined />,
-      label: <Link href='/profile'>loan</Link>,
+      label: <Link href='/customer/loan'>loan</Link>,
     },
   ];
 
