@@ -11,6 +11,7 @@ type Payment struct {
 	PaymentDate      time.Time `gorm:"type:datetime;not null;default:CURRENT_TIMESTAMP"`
 	PaymentAmount    float64   `gorm:"not null"`
 	Description      string    `gorm:"not null"`
+	LoanAmount	     float64   `gorm:"not null"`
 	InterestBalance  float64   `gorm:"not null"`
 	PrincipalBalance float64   `gorm:"not null"`
 	LoanID           uint      `gorm:"not null"`
@@ -22,6 +23,7 @@ type PaymentResponse struct {
 	PaymentDate      time.Time `json:"paymentDate"`
 	PaymentAmount    float64   `json:"paymentAmount"`
 	Description      string    `json:"description"`
+	LoanAmount	     float64   `json:"loanAmount"`
 	PrincipalBalance float64   `json:"principalBalance"`
 	InterestBalance  float64   `json:"interestBalance"`
 	LoanID           uint

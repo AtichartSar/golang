@@ -20,10 +20,8 @@ var count int64
 	page, _ := strconv.Atoi(p.ctx.DefaultQuery("page", "1"))
 	limit, _ := strconv.Atoi(p.ctx.DefaultQuery("limit", "10"))
 	order := p.ctx.DefaultQuery("order", "asc")
-p.query.Model(p.records).Count(&count)
+    p.query.Model(p.records).Count(&count)
 
-	// go p.countRecords(ch)
-// .Preload("Loan")s
 	offset := (page - 1) * limit
 	p.query.Order("id " + order).Limit(limit).Offset(offset).Find(p.records)
 

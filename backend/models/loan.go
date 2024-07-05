@@ -46,6 +46,8 @@ type LoanResponse struct {
 		Description      string    `json:"description"`
 		PrincipalBalance float64   `json:"principalBalance"`
 		InterestBalance  float64   `json:"interestBalance"`
+		LoanAmount	     float64   `json:"loanAmount"`
+
 	} `json:"Payments"`
 }
 

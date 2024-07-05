@@ -77,7 +77,9 @@ func (p *Payment) Create(ctx *gin.Context) {
 	}
 
 	if paymentForm.PaymentAmount == loan.LoanAmount{
-			payment := models.Payment{}
+			payment := models.Payment{
+				LoanAmount:    loan.LoanAmount,
+			}
 			copier.Copy(&payment, &paymentForm)
 			if err := p.DB.Create(&payment).Error; err != nil {
 				ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
@@ -112,6 +114,7 @@ func (p *Payment) Create(ctx *gin.Context) {
 	payment := models.Payment{
 		InterestBalance:  loanInterestBalance,
 		PrincipalBalance: loanPrincipalBalance,
+		LoanAmount:       loan.LoanAmount,
 	}
 	copier.Copy(&payment, &paymentForm)
 	if err := p.DB.Create(&payment).Error; err != nil {

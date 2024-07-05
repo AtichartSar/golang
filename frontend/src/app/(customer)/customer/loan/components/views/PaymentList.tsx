@@ -5,7 +5,6 @@ import { defaultDate } from '@/utils/date';
 import { currency } from '@/utils/format';
 import styled from '@emotion/styled';
 import { Col, Row, Skeleton } from 'antd';
-import React from 'react';
 import { TableVirtuoso } from 'react-virtuoso';
 
 type Props = {
@@ -49,6 +48,7 @@ const PaymentTable = ({ data }: PaymentTableProps) => {
           <th>id</th>
           <th>วันที่ชำระ</th>
           <th>ยอดชำระ</th>
+          <th>ยอดเต็ม</th>
           <th>ยอดเงินต้น</th>
           <th>ยอดดอกเบี้ย</th>
           <th>หมายเหตุ</th>
@@ -61,6 +61,7 @@ const PaymentTable = ({ data }: PaymentTableProps) => {
             <td>{data.id}</td>
             <td>{defaultDate(data.paymentDate)}</td>
             <td>{currency(String(data.paymentAmount))}</td>
+            <td>{currency(String(data.loanAmount))}</td>
             <td>{currency(String(data.principalBalance))}</td>
             <td>{currency(String(data.interestBalance))}</td>
             <td>{data.description}</td>

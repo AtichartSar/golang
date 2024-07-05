@@ -1,12 +1,12 @@
 'use client';
 import { IPaginationTable } from '@/interface/paginationTable';
+import { getPaymentList } from '@/service/api/paymentService';
+import { defaultDate } from '@/utils/date';
+import { currency } from '@/utils/format';
+import { EditOutlined, SearchOutlined } from '@ant-design/icons';
 import { Button, Space, Table, TableProps, message } from 'antd';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
-import { EditOutlined, SearchOutlined } from '@ant-design/icons';
-import { getPaymentList } from '@/service/api/paymentService';
-import { currency } from '@/utils/format';
-import { defaultDate } from '@/utils/date';
+import { useEffect, useState } from 'react';
 
 const TablePayment = () => {
   const searchParams = useSearchParams();
@@ -48,10 +48,12 @@ const TablePayment = () => {
       render: (paymentAmount: string, records: any) => currency(paymentAmount),
     },
     {
-      title: 'หมายเหตุ',
-      dataIndex: 'description',
-      key: 'description',
+      title: 'ยอดเต็ม',
+      dataIndex: 'loanAmount',
+      key: 'loanAmount',
+      render: (loanAmount: string, records: any) => currency(loanAmount),
     },
+
     {
       title: 'ยอดเงินต้น',
       dataIndex: 'principalBalance',
@@ -63,6 +65,11 @@ const TablePayment = () => {
       dataIndex: 'interestBalance',
       key: 'interestBalance',
       render: (interestBalance: string, records: any) => currency(interestBalance),
+    },
+    {
+      title: 'หมายเหตุ',
+      dataIndex: 'description',
+      key: 'description',
     },
     {
       title: 'Action',

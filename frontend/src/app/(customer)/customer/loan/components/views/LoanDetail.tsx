@@ -1,7 +1,7 @@
 import TitleForm from '@/components/Title/Title';
 import { ILoanIdRes } from '@/service/models/loan/loanIdRes';
+import { currency } from '@/utils/format';
 import { Col, Row, Skeleton, Space, Typography } from 'antd';
-import React from 'react';
 
 type Props = {
   data: ILoanIdRes;
@@ -20,7 +20,7 @@ const LoanDetail = ({ data }: Props) => {
         <Row>
           <Col span={2}>ยอดเงินกู้ :</Col>
           <Col span={4}>
-            <Space size={4}>{data.loanAmount}บาท</Space>
+            <Space size={4}>{currency(String(data.loanAmount))}</Space>
           </Col>
         </Row>
         <Row>

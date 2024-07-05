@@ -25,4 +25,5 @@ export interface Payment {
   description: string;
   principalBalance: number;
   interestBalance: number;
+  loanAmount: number;
 }

@@ -1,11 +1,11 @@
 'use client';
 import { createLoan, updateLoan } from '@/service/api/loanService';
 import { loanCreateReq, loanUpdateReq } from '@/service/models/loan/loanReq';
+import { SaveOutlined } from '@ant-design/icons';
 import styled from '@emotion/styled';
 import { Button, Form, FormItemProps, InputNumber, Row, Space, message } from 'antd';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
-import { SaveOutlined } from '@ant-design/icons';
+import { useEffect, useState } from 'react';
 
 type Props = {
   data?: any;
@@ -19,8 +19,12 @@ const FormLoan = ({ id, data, loadForm = false, mode }: Props) => {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
 
+  const goToCustomerLoan = () => {
+    router.push('/customer/loan');
+  };
+
   const handleCancel = () => {
-    router.push('/loan');
+    goToCustomerLoan();
   };
 
   useEffect(() => {
@@ -32,7 +36,7 @@ const FormLoan = ({ id, data, loadForm = false, mode }: Props) => {
       setLoading(true);
       await createLoan(body);
       setLoading(false);
-      router.push('/loan');
+      goToCustomerLoan();
       message.success('สร้างสำเร็จ');
     } catch (error) {
       setLoading(false);
@@ -45,7 +49,7 @@ const FormLoan = ({ id, data, loadForm = false, mode }: Props) => {
       setLoading(true);
       await updateLoan(id, body);
       setLoading(false);
-      router.push('/customer/loan');
+      goToCustomerLoan();
       message.success('แก้ไขสำเร็จ');
     } catch (error) {
       setLoading(false);

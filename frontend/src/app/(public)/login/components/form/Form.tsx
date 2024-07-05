@@ -1,15 +1,15 @@
+import { getPermission } from '@/config/permission';
+import { validateAndGetTokenPayload } from '@/middleware';
 import { login } from '@/service/api/customerService';
 import { customerLogin } from '@/service/models/customer/customerReq';
 import { setAccessToken } from '@/service/token';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import styled from '@emotion/styled';
 import { Button, Form, Input, Row, Space, message } from 'antd';
-import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { setCookie } from 'cookies-next';
 import Cookies from 'js-cookie';
-import { getPermission } from '@/config/permission';
-import { validateAndGetTokenPayload } from '@/middleware';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 type Props = {};
 
@@ -28,17 +28,13 @@ const FormLogin = (props: Props) => {
       await Cookies.set('access_token', res.data.access_token);
 
       setTimeout(() => {
-        setLoading(false);
         router.refresh();
         message.success('เข้าสู่ระบบสำเร็จ');
         const payload = validateAndGetTokenPayload(res.data.access_token);
         router.push(getPermission[payload.role].defaultPath);
       }, 1000);
-
-      setLoading(false);
     } catch (error) {
       setLoading(false);
-
       message.error('เข้าสู่ระบบไม่สำเร็จ');
     }
   };
@@ -70,7 +66,7 @@ const FormLogin = (props: Props) => {
         <Row justify='center' gutter={[8, 8]}>
           <Space size={16}>
             <StyledButton loading={loading} type='primary' htmlType='submit'>
-              เข้าสู่ระบบ1
+              เข้าสู่ระบบ
             </StyledButton>
           </Space>
         </Row>
