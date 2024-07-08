@@ -1,10 +1,11 @@
 'use client';
-import styled from '@emotion/styled';
-import { Button, Form, FormItemProps, Input, InputNumber, Row, Space, Spin } from 'antd';
-import React, { useEffect, useState } from 'react';
-import { SaveOutlined } from '@ant-design/icons';
-import { useRouter } from 'next/navigation';
+import { updatePayment } from '@/service/api/paymentService';
 import { IPaymentIdData } from '@/service/models/payment/paymentIdRes';
+import { SaveOutlined } from '@ant-design/icons';
+import styled from '@emotion/styled';
+import { Button, Form, FormItemProps, Input, InputNumber, Row, Space, message } from 'antd';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 type Props = {
   data?: IPaymentIdData;
@@ -18,10 +19,27 @@ const FormPayment = ({ id, data, loadForm = false, mode }: Props) => {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const handleEdit = () => {};
+  const handleEdit = async (body: any) => {
+    try {
+      console.log(body);
+
+      setLoading(true);
+      await updatePayment(id, body);
+      setLoading(false);
+      gotoPayment();
+      message.success('แก้ไขสำเร็จ');
+    } catch (error) {
+      setLoading(false);
+      message.error('แก้ไขไม่สำเร็จ');
+    }
+  };
+
+  const gotoPayment = () => {
+    router.push('/payment');
+  };
   const handleSubmit = () => {};
   const handleCancel = () => {
-    router.push('/payment');
+    gotoPayment();
   };
 
   const disable = mode == 'view' || loadForm;

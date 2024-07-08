@@ -65,3 +65,10 @@ type PaymentCreated struct {
 	InterestBalance  float64   `json:"interestBalance"`
 	LoanID           uint      `json:"LoanId"`
 }
+
+type PaymentUpdate struct {
+	Description string `json:"description"`
+	InterestBalance float64 `json:"interestBalance"`
+	PrincipalBalance float64 `json:"principalBalance"`
+	PaymentAmount float64 `json:"paymentAmount"`
+}

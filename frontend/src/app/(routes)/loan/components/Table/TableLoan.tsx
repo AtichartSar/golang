@@ -1,13 +1,13 @@
 'use client';
-import { getLoanList } from '@/service/api/loanService';
-import { defaultDate } from '@/utils/date';
-import { Button, Space, Table, TableProps, message } from 'antd';
-import React, { useEffect, useState } from 'react';
-import { EditOutlined, DeleteOutlined, SearchOutlined } from '@ant-design/icons';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { IPaginationTable } from '@/interface/paginationTable';
+import { deleteLoan, getLoanList } from '@/service/api/loanService';
 import { ILoanTable, LoanListRes } from '@/service/models/loan/loanListRes';
+import { defaultDate } from '@/utils/date';
 import { currency, percent } from '@/utils/format';
+import { DeleteOutlined, EditOutlined, SearchOutlined } from '@ant-design/icons';
+import { Button, Space, Table, TableProps, message } from 'antd';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 type Props = {};
 
@@ -65,7 +65,7 @@ const TableLoan = (props: Props) => {
       render: (_, records) => (
         <Space>
           <Button icon={<EditOutlined />} onClick={() => handleEdit(records.id)} />
-          <Button icon={<DeleteOutlined />} />
+          <Button icon={<DeleteOutlined />} onClick={() => handleDelete(records.id)} />
           <Button icon={<SearchOutlined />} onClick={() => handleView(records.id)} />
         </Space>
       ),
@@ -97,6 +97,18 @@ const TableLoan = (props: Props) => {
     } catch (error) {
       setLoading(false);
       message.error('Error fetching');
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      setLoading(true);
+      await deleteLoan(id);
+      message.success('ลบข้อมูลสำเร็จ');
+      fetch();
+    } catch (error) {
+      setLoading(false);
+      message.error('เกิดข้อผิดพลาด');
     }
   };
 

@@ -1,6 +1,5 @@
-import React from 'react';
 import { Col, Row } from 'antd';
-import TableLoan from './components/Table/Table';
+import TableLoan from './components/Table/TableLoan';
 
 type Props = {};
 

@@ -61,7 +61,7 @@ const TableCustomer = (props: Props) => {
   const handleDelete = async (id: string) => {
     try {
       setLoading(true);
-      const res = await deleteCustomer(id);
+      await deleteCustomer(id);
       message.success('ลบข้อมูลสำเร็จ');
       fetch();
     } catch (error) {

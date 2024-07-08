@@ -100,11 +100,19 @@ func (p *Payment) Create(ctx *gin.Context) {
 	}
 
 	loanInterestBalance, err := interest.getLoanInterestBalance()
+
+	log.Println("loanInterestBalance", loanInterestBalance)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 
 	}
+
+	if loanInterestBalance >= paymentForm.PaymentAmount {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Payment amount is less than interest amount"})
+		return
+	}
+
 	loanPrincipalBalance, err := interest.getLoanPrincipalBalance()
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -138,4 +146,24 @@ func (p *Payment) Create(ctx *gin.Context) {
 	var serializedPaymentCreated models.PaymentCreated
 	copier.Copy(&serializedPaymentCreated, &payment)
 	ctx.JSON(http.StatusCreated, gin.H{"data": serializedPaymentCreated})
+}
+
+func (p *Payment) Update(ctx *gin.Context){
+var paymentForm models.PaymentUpdate
+	if err := ctx.ShouldBind(&paymentForm); err != nil {
+		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+		return
+	}
+	payment, err := p.findPaymentByID(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := p.DB.Model(&payment).Updates(&paymentForm).Error; err != nil {
+		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{"data": "Update payment success"})
+
 }

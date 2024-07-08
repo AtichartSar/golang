@@ -52,6 +52,7 @@ func Serve(r *gin.Engine) {
 		paymentGroup.GET("", paymentController.FindAll)
 		paymentGroup.GET("/:id", paymentController.FindOne)
 		paymentGroup.POST("", paymentController.Create)
+		paymentGroup.PATCH("/:id", paymentController.Update)
 	}
 
 }

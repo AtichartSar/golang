@@ -1,5 +1,6 @@
 import { axiosGo } from '@/lib/axios/axios-go';
 import { IPaymentCreateReq } from '../models/payment/paymentCreateReq';
+import { IPaymentUpdateReq } from '../models/payment/paymentUpdateReq';
 
 export const getPayment = async (id: string) => {
   try {
@@ -22,6 +23,15 @@ export const getPaymentList = async (params: any) => {
 export const createPayment = async (body: IPaymentCreateReq) => {
   try {
     const res = await axiosGo.post('/api/v1/payments', body);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updatePayment = async (id: string, body: IPaymentUpdateReq) => {
+  try {
+    const res = await axiosGo.patch(`/api/v1/payments/${id}`, body);
     return res.data;
   } catch (error) {
     throw error;
